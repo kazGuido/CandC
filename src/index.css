@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+
+  --color-brand-cream: #FDF8F1;
+  --color-brand-terracotta: #B05B30;
+  --color-brand-ochre: #DFA651;
+  --color-brand-brown: #5D3A1A;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-brand-brown font-sans selection:bg-brand-terracotta selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+.glass-nav {
+  @apply sticky top-0 z-50 bg-brand-cream/80 backdrop-blur-md border-b border-brand-terracotta/10;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center px-8 py-3 rounded-full bg-brand-terracotta text-white text-sm font-bold uppercase tracking-wider transition-all hover:bg-brand-brown hover:shadow-lg active:scale-95 cursor-pointer;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center px-8 py-3 rounded-full border border-brand-brown text-brand-brown text-sm font-bold uppercase tracking-wider transition-all hover:bg-brand-brown hover:text-brand-cream active:scale-95 cursor-pointer;
+}
+
+.text-overline {
+  @apply text-brand-ochre text-[14px] font-bold uppercase tracking-[3px] block mb-4;
+}
+
+.section-container {
+  @apply max-w-7xl mx-auto px-6 py-24 md:px-12 lg:px-16;
+}
