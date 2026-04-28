@@ -1,30 +1,38 @@
 import { motion } from 'motion/react';
 import { Heart, CreditCard, Users, Handshake, Gift, Package } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { HELLOASSO_URL } from '../data';
+import { trackEvent } from '../lib/analytics';
 
 const SUPPORT_METHODS = [
   {
     title: "Dons Financiers",
     description: "Financez directement nos actions sur le terrain. 100% de votre don est réinvesti.",
     icon: CreditCard,
-    cta: "Faire un don via HelloAsso"
+    cta: "Faire un don via HelloAsso",
+    href: HELLOASSO_URL,
+    external: true,
   },
   {
     title: "Bénévolat",
     description: "Donnez de votre temps et de vos compétences pour nous aider à grandir.",
     icon: Users,
-    cta: "Devenir bénévole"
+    cta: "Devenir bénévole",
+    href: '/contact',
   },
   {
     title: "Collecte de matériel",
     description: "Fournitures scolaires, vêtements, jouets : vos objets ont une seconde vie utile.",
     icon: Package,
-    cta: "Organiser une collecte"
+    cta: "Organiser une collecte",
+    href: '/contact',
   },
   {
     title: "Parrainage",
     description: "Accompagnez personnellement un enfant dans sa scolarité sur le long terme.",
     icon: Handshake,
-    cta: "En savoir plus"
+    cta: "En savoir plus",
+    href: '/contact',
   }
 ];
 
@@ -57,9 +65,24 @@ export const Support = () => {
               <p className="text-brand-brown/70 leading-relaxed mb-8">
                 {method.description}
               </p>
-              <button className="text-sm font-bold uppercase tracking-widest text-brand-terracotta flex items-center gap-2 hover:gap-4 transition-all">
-                {method.cta} <Gift size={16} />
-              </button>
+              {method.external ? (
+                <a
+                  href={method.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('donate_click', {source: 'support_card'})}
+                  className="text-sm font-bold uppercase tracking-widest text-brand-terracotta flex items-center gap-2 hover:gap-4 transition-all"
+                >
+                  {method.cta} <Gift size={16} />
+                </a>
+              ) : (
+                <Link
+                  to={method.href}
+                  className="text-sm font-bold uppercase tracking-widest text-brand-terracotta flex items-center gap-2 hover:gap-4 transition-all"
+                >
+                  {method.cta} <Gift size={16} />
+                </Link>
+              )}
             </motion.div>
           ))}
         </div>
@@ -73,9 +96,10 @@ export const Support = () => {
               Utilisez notre plateforme partenaire HelloAsso pour effectuer vos dons en toute sécurité. Un reçu fiscal vous sera envoyé par mail.
             </p>
             <a 
-              href="#" 
+              href={HELLOASSO_URL}
               target="_blank" 
-              rel="noopener noreferrer" 
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('donate_click', {source: 'support_hero'})}
               className="inline-block bg-brand-terracotta hover:bg-brand-ochre text-white font-bold px-12 py-5 rounded-2xl transition-all text-sm uppercase tracking-widest"
             >
               Accéder au formulaire de don

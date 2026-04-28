@@ -79,3 +79,6 @@ export const CONTACT_INFO = {
   instagram: '@coeurandcare',
   address: 'Côte d’Ivoire & Diaspora',
 };
+
+// Replace with your public HelloAsso campaign URL.
+export const HELLOASSO_URL = import.meta.env.VITE_HELLOASSO_URL || 'https://www.helloasso.com';

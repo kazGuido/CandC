@@ -1,5 +1,8 @@
 import { Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { CONTACT_INFO } from '../data';
+import { HELLOASSO_URL } from '../data';
+import { trackEvent } from '../lib/analytics';
 
 export const Footer = () => {
   return (
@@ -19,10 +22,20 @@ export const Footer = () => {
             © 2026 Cœur and Care — Association Loi 1901
           </p>
         </div>
+
+        <a
+          href={HELLOASSO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent('donate_click', {source: 'footer'})}
+          className="inline-flex mb-8 btn-primary"
+        >
+          Faire un don maintenant
+        </a>
         
         <div className="flex flex-wrap items-center justify-center gap-x-8 lg:gap-x-12 gap-y-6 text-[9px] md:text-[11px] font-bold uppercase tracking-[1px] text-brand-brown/40 border-t border-brand-terracotta/5 pt-8">
-          <a href="#" className="hover:text-brand-terracotta transition-colors">Mentions Légales</a>
-          <a href="#" className="hover:text-brand-terracotta transition-colors">Confidentialité</a>
+          <Link to="/mentions-legales" className="hover:text-brand-terracotta transition-colors">Mentions Légales</Link>
+          <Link to="/confidentialite" className="hover:text-brand-terracotta transition-colors">Confidentialité</Link>
           <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-brand-terracotta transition-colors lowercase tracking-normal">{CONTACT_INFO.email}</a>
           <p className="text-brand-brown/60 tracking-normal">{CONTACT_INFO.phone}</p>
         </div>

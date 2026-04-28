@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
+import { FormEvent, useState } from 'react';
 import { Calendar, User, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { trackEvent } from '../lib/analytics';
 
 const MOCK_POSTS = [
   {
@@ -30,6 +31,47 @@ const MOCK_POSTS = [
 ];
 
 export const Blog = () => {
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNewsletterStatus('idle');
+    setNewsletterMessage('');
+    setNewsletterSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      email: String(formData.get('email') ?? '').trim(),
+      company: String(formData.get('company') ?? '').trim(),
+    };
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || "Inscription indisponible pour l'instant.");
+      }
+      event.currentTarget.reset();
+      setNewsletterStatus('success');
+      setNewsletterMessage('Merci. Votre demande est bien enregistree.');
+      trackEvent('newsletter_submit_success');
+    } catch (error) {
+      setNewsletterStatus('error');
+      setNewsletterMessage(
+        error instanceof Error ? error.message : "Une erreur est survenue, merci de reessayer."
+      );
+      trackEvent('newsletter_submit_error');
+    } finally {
+      setNewsletterSubmitting(false);
+    }
+  };
+
   return (
     <div className="pt-24 min-h-screen">
       <section className="section-container">
@@ -83,14 +125,24 @@ export const Blog = () => {
           <p className="text-brand-brown/60 mb-10 max-w-md mx-auto">
             Inscrivez-vous à notre newsletter pour recevoir nos rapports d'impact directement dans votre boîte mail.
           </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
             <input 
               type="email" 
+              name="email"
+              required
               placeholder="votre@email.com" 
               className="flex-1 bg-white border border-brand-terracotta/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta transition-colors"
             />
-            <button className="btn-primary">S'inscrire</button>
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+            <button type="submit" disabled={newsletterSubmitting} className="btn-primary disabled:opacity-60 disabled:cursor-not-allowed">
+              {newsletterSubmitting ? 'Envoi...' : "S'inscrire"}
+            </button>
           </form>
+          {newsletterStatus !== 'idle' && (
+            <p className={`mt-4 text-sm ${newsletterStatus === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+              {newsletterMessage}
+            </p>
+          )}
         </div>
       </section>
     </div>

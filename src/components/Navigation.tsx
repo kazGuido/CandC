@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../data';
+import { trackEvent } from '../lib/analytics';
 
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -81,7 +82,7 @@ export const Navigation = () => {
             </AnimatePresence>
           </div>
 
-          <Link to="/soutenir" className="btn-primary py-2 px-6 ml-4">
+          <Link to="/soutenir" onClick={() => trackEvent('donation_page_open', {source: 'nav_desktop'})} className="btn-primary py-2 px-6 ml-4">
             Faire un don
           </Link>
         </div>
@@ -116,7 +117,7 @@ export const Navigation = () => {
                   {link.name}
                 </Link>
               ))}
-              <Link to="/soutenir" className="btn-primary">
+              <Link to="/soutenir" onClick={() => trackEvent('donation_page_open', {source: 'nav_mobile'})} className="btn-primary">
                 Faire un don
               </Link>
             </div>

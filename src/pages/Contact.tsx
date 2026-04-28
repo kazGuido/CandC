@@ -1,8 +1,57 @@
 import { motion } from 'motion/react';
+import { FormEvent, useState } from 'react';
 import { Mail, Phone, Instagram, MapPin, Send } from 'lucide-react';
 import { CONTACT_INFO } from '../data';
+import { trackEvent } from '../lib/analytics';
 
 export const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus('idle');
+    setStatusMessage('');
+    setIsSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      name: String(formData.get('name') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+      subject: String(formData.get('subject') ?? '').trim(),
+      message: String(formData.get('message') ?? '').trim(),
+      company: String(formData.get('company') ?? '').trim(),
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data?.error || 'Envoi impossible pour le moment.');
+      }
+
+      event.currentTarget.reset();
+      setStatus('success');
+      setStatusMessage('Message envoye. Nous revenons vers vous sous 48h.');
+      trackEvent('contact_submit_success');
+    } catch (error) {
+      setStatus('error');
+      setStatusMessage(
+        error instanceof Error ? error.message : "Une erreur est survenue. Merci de reessayer."
+      );
+      trackEvent('contact_submit_error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="pt-24 min-h-screen">
       <section className="section-container">
@@ -63,27 +112,69 @@ export const Contact = () => {
 
           {/* Contact form */}
           <div className="lg:col-span-7">
-            <form className="bg-white p-8 md:p-12 rounded-[3rem] border border-brand-terracotta/5 shadow-2xl space-y-6">
+            <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-[3rem] border border-brand-terracotta/5 shadow-2xl space-y-6">
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 ml-1">Prénom & Nom</label>
-                  <input type="text" className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all" placeholder="Jean Dupont" />
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all"
+                    placeholder="Jean Dupont"
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 ml-1">Email</label>
-                  <input type="email" className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all" placeholder="jean@exemple.com" />
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all"
+                    placeholder="jean@exemple.com"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 ml-1">Sujet</label>
-                <input type="text" className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all" placeholder="Comment pouvons-nous vous aider ?" />
+                <input
+                  type="text"
+                  name="subject"
+                  required
+                  className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all"
+                  placeholder="Comment pouvons-nous vous aider ?"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 ml-1">Message</label>
-                <textarea rows={5} className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all resize-none" placeholder="Votre message détaillé..."></textarea>
+                <textarea
+                  rows={5}
+                  name="message"
+                  required
+                  className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all resize-none"
+                  placeholder="Votre message détaillé..."
+                ></textarea>
               </div>
-              <button className="w-full btn-primary py-5 rounded-2xl flex items-center justify-center gap-3 group">
-                Envoyer le message <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+              {status !== 'idle' && (
+                <p className={`text-sm ${status === 'success' ? 'text-green-700' : 'text-red-700'}`}>
+                  {statusMessage}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full btn-primary py-5 rounded-2xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}{' '}
+                <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
             </form>
           </div>

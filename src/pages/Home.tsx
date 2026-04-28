@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Typewriter } from '../components/Typewriter';
-import { ACTIONS, PROJECTS } from '../data';
+import { ACTIONS, HELLOASSO_URL, PROJECTS } from '../data';
+import { trackEvent } from '../lib/analytics';
 
 const IconMap: Record<string, any> = {
   GraduationCap,
@@ -60,6 +61,15 @@ export const Home = () => {
                 En savoir plus
               </Link>
             </div>
+            <a
+              href={HELLOASSO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('donate_click', {source: 'home_hero'})}
+              className="inline-flex mt-5 text-xs uppercase tracking-wider font-bold text-brand-terracotta hover:text-brand-brown"
+            >
+              Faire un don direct via HelloAsso
+            </a>
           </motion.div>
         </div>
       </section>

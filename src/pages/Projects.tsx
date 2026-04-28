@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
 import { MapPin, ArrowRight } from 'lucide-react';
-import { PROJECTS } from '../data';
+import { HELLOASSO_URL, PROJECTS } from '../data';
 import { Link } from 'react-router-dom';
+import { trackEvent } from '../lib/analytics';
 
 export const Projects = () => {
   return (
@@ -57,9 +58,15 @@ export const Projects = () => {
                   </ul>
                 </div>
 
-                <Link to="/soutenir" className="btn-primary w-full sm:w-auto inline-flex justify-center">
+                <a
+                  href={`${HELLOASSO_URL}?utm_source=site&utm_medium=project&utm_campaign=${project.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('donate_click', {source: `project_${project.id}`})}
+                  className="btn-primary w-full sm:w-auto inline-flex justify-center"
+                >
                   Soutenir ce projet
-                </Link>
+                </a>
               </div>
             </motion.div>
           ))}
