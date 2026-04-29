@@ -1,13 +1,23 @@
 import { motion } from 'motion/react';
-import { FormEvent, useState } from 'react';
-import { Mail, Phone, Instagram, MapPin, Send } from 'lucide-react';
+import { FormEvent, useMemo, useState } from 'react';
+import { Mail, Phone, Instagram, Facebook, MapPin, Send } from 'lucide-react';
 import { CONTACT_INFO } from '../data';
 import { trackEvent } from '../lib/analytics';
+import { useLocation } from 'react-router-dom';
 
 export const Contact = () => {
+  const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
+
+  const prefills = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return {
+      subject: params.get('subject') ?? '',
+      message: params.get('message') ?? '',
+    };
+  }, [location.search]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -93,7 +103,10 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 mb-1">Siège Social</p>
-                  <p className="text-brand-brown font-medium">Côte d'Ivoire & Diaspora</p>
+                  <p className="text-brand-brown font-medium">{CONTACT_INFO.address}</p>
+                  <p className="text-xs text-brand-brown/60 mt-2">
+                    Branche Côte d’Ivoire prévue d’ici août.
+                  </p>
                 </div>
               </div>
             </div>
@@ -108,6 +121,23 @@ export const Contact = () => {
                </div>
                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-terracotta/20 rounded-full blur-3xl -mr-16 -mt-16" />
             </a>
+
+            {CONTACT_INFO.facebook ? (
+              <a
+                href={CONTACT_INFO.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-8 bg-white border border-brand-terracotta/10 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
+              >
+                <div className="relative z-10 flex items-center gap-4">
+                  <Facebook size={32} className="text-brand-terracotta" />
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-brand-brown/40 mb-1">Notre page Facebook</p>
+                    <p className="text-xl font-serif text-brand-brown">Facebook</p>
+                  </div>
+                </div>
+              </a>
+            ) : null}
           </div>
 
           {/* Contact form */}
@@ -143,6 +173,7 @@ export const Contact = () => {
                   required
                   className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all"
                   placeholder="Comment pouvons-nous vous aider ?"
+                  defaultValue={prefills.subject}
                 />
               </div>
               <div className="space-y-2">
@@ -153,6 +184,7 @@ export const Contact = () => {
                   required
                   className="w-full bg-brand-cream/30 border-transparent border-2 rounded-2xl px-6 py-4 focus:outline-none focus:border-brand-terracotta focus:bg-white transition-all resize-none"
                   placeholder="Votre message détaillé..."
+                  defaultValue={prefills.message}
                 ></textarea>
               </div>
               <input

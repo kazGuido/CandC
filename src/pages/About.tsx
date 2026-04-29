@@ -27,7 +27,7 @@ export const About = () => {
           <div className="relative">
             <div className="aspect-square bg-brand-cream rounded-[3rem] overflow-hidden shadow-2xl relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?q=80&w=1000&auto=format&fit=crop" 
                 alt="Enfants souriants" 
                 className="w-full h-full object-cover"
               />

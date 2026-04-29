@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, Menu, X } from 'lucide-react';
-import { NAV_LINKS } from '../data';
+import { Heart, Menu, X, Globe } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
+import { useTranslation } from 'react-i18next';
 
 export const Navigation = () => {
+  const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -24,8 +25,22 @@ export const Navigation = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  const visibleLinks = NAV_LINKS.slice(0, 4);
-  const hiddenLinks = NAV_LINKS.slice(4);
+  const navLinks = [
+    { key: 'home', href: '/' },
+    { key: 'projects', href: '/projets' },
+    { key: 'blog', href: '/blog' },
+    { key: 'about', href: '/a-propos' },
+    { key: 'support', href: '/soutenir' },
+    { key: 'contact', href: '/contact' },
+  ];
+
+  const visibleLinks = navLinks.slice(0, 4);
+  const hiddenLinks = navLinks.slice(4);
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language.startsWith('fr') ? 'en' : 'fr';
+    i18n.changeLanguage(newLang);
+  };
 
   return (
     <nav className={`glass-nav transition-all duration-300 ${scrolled ? 'py-3 shadow-sm' : 'py-5'}`}>
@@ -43,20 +58,20 @@ export const Navigation = () => {
         <div className="hidden lg:flex items-center gap-6 xl:gap-8">
           {visibleLinks.map((link) => (
             <Link
-              key={link.name}
+              key={link.key}
               to={link.href}
               className={`text-[13px] font-bold uppercase tracking-[0.5px] transition-colors ${
                 location.pathname === link.href ? 'text-brand-terracotta' : 'hover:text-brand-terracotta'
               }`}
             >
-              {link.name}
+              {t(`nav.${link.key}`)}
             </Link>
           ))}
           
           {/* Dropdown Menu */}
           <div className="relative group" onMouseEnter={() => setIsDropdownOpen(true)} onMouseLeave={() => setIsDropdownOpen(false)}>
             <button className="text-[13px] font-bold uppercase tracking-[0.5px] hover:text-brand-terracotta transition-colors flex items-center gap-1 cursor-pointer">
-              Plus <Menu size={14} />
+              {t('nav.more')} <Menu size={14} />
             </button>
             <AnimatePresence>
               {isDropdownOpen && (
@@ -68,32 +83,51 @@ export const Navigation = () => {
                 >
                   {hiddenLinks.map((link) => (
                     <Link
-                      key={link.name}
+                      key={link.key}
                       to={link.href}
                       className={`block py-3 text-[12px] font-bold uppercase tracking-wider transition-colors border-b border-brand-terracotta/5 last:border-0 ${
                         location.pathname === link.href ? 'text-brand-terracotta' : 'hover:text-brand-terracotta'
                       }`}
                     >
-                      {link.name}
+                      {t(`nav.${link.key}`)}
                     </Link>
                   ))}
+                  <Link
+                    to="/admin"
+                    className={`block py-3 text-[12px] font-bold uppercase tracking-wider transition-colors border-0 ${
+                      location.pathname === '/admin' ? 'text-brand-terracotta' : 'hover:text-brand-terracotta text-gray-400'
+                    }`}
+                  >
+                    {t('nav.admin')}
+                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
-          <Link to="/soutenir" onClick={() => trackEvent('donation_page_open', {source: 'nav_desktop'})} className="btn-primary py-2 px-6 ml-4">
-            Faire un don
-          </Link>
+          <div className="flex items-center gap-4 ml-4">
+            <button onClick={toggleLanguage} className="flex items-center gap-1 text-[13px] font-bold uppercase hover:text-brand-terracotta">
+              <Globe size={16} />
+              {i18n.language.startsWith('fr') ? 'EN' : 'FR'}
+            </button>
+            <Link to="/soutenir" onClick={() => trackEvent('donation_page_open', {source: 'nav_desktop'})} className="btn-primary py-2 px-6">
+              {t('nav.donate')}
+            </Link>
+          </div>
         </div>
 
         {/* Mobile Toggle */}
-        <button 
-          className="lg:hidden text-brand-brown p-2"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X /> : <Menu />}
-        </button>
+        <div className="lg:hidden flex items-center gap-4">
+          <button onClick={toggleLanguage} className="text-brand-brown p-2 font-bold text-sm uppercase">
+            {i18n.language.startsWith('fr') ? 'EN' : 'FR'}
+          </button>
+          <button 
+            className="text-brand-brown p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -106,19 +140,22 @@ export const Navigation = () => {
             className="lg:hidden bg-brand-cream border-b border-brand-terracotta/10 overflow-hidden"
           >
             <div className="px-6 py-10 flex flex-col gap-6 text-center">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.key}
                   to={link.href}
                   className={`text-base font-bold uppercase tracking-widest ${
                     location.pathname === link.href ? 'text-brand-terracotta' : ''
                   }`}
                 >
-                  {link.name}
+                  {t(`nav.${link.key}`)}
                 </Link>
               ))}
+              <Link to="/admin" className="text-base font-bold uppercase tracking-widest text-gray-500">
+                {t('nav.admin')}
+              </Link>
               <Link to="/soutenir" onClick={() => trackEvent('donation_page_open', {source: 'nav_mobile'})} className="btn-primary">
-                Faire un don
+                {t('nav.donate')}
               </Link>
             </div>
           </motion.div>

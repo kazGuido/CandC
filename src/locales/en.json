@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "blog": "Blog",
+    "about": "About Us",
+    "support": "Support Us",
+    "contact": "Contact",
+    "donate": "Donate",
+    "more": "More",
+    "admin": "Admin"
+  },
+  "home": {
+    "hero": {
+      "overline": "FRANCE • IVORY COAST • ABIDJAN • BONOUA • BOUAKÉ • YAMOUSSOUKRO",
+      "title": "A helping <1>hand</1>, <br/> an open heart, <br/> a changed future.",
+      "quote": "\"For her, for them, for tomorrow\"",
+      "donateBtn": "Support us",
+      "aboutBtn": "Learn more",
+      "helloAsso": "Donate directly via HelloAsso"
+    },
+    "mission": {
+      "overline": "OUR IMPACT",
+      "title": "Acting together for tomorrow",
+      "desc": "Cœur and Care mobilizes solidarity to offer dignified support to vulnerable children and mothers.",
+      "link": "Discover our story"
+    },
+    "axis": {
+      "overline": "OUR AREAS",
+      "title": "Our areas of action"
+    },
+    "projectsCta": {
+      "overline": "OUR PROJECTS",
+      "title": "Discover our actions <br/> on the field",
+      "desc": "From Les Mésanges school to Padre Pio orphanage, discover how your donations change lives.",
+      "btn": "See all projects"
+    },
+    "stats": {
+      "transparency": "Financial transparency",
+      "actions": "Actions in France & Ivory Coast",
+      "volunteers": "Over 20 committed volunteers"
+    }
+  }
+}

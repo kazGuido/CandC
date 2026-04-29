@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "projects": "Nos Projets",
+    "blog": "Blog",
+    "about": "Qui sommes-nous",
+    "support": "Nous soutenir",
+    "contact": "Contact",
+    "donate": "Faire un don",
+    "more": "Plus",
+    "admin": "Admin"
+  },
+  "home": {
+    "hero": {
+      "overline": "FRANCE • CÔTE D’IVOIRE • ABIDJAN • BONOUA • BOUAKÉ • YAMOUSSOUKRO",
+      "title": "Une main <1>tendue</1>, <br/> un cœur ouvert, <br/> un avenir changé.",
+      "quote": "\"Pour elle, pour eux, pour demain\"",
+      "donateBtn": "Nous soutenir",
+      "aboutBtn": "En savoir plus",
+      "helloAsso": "Faire un don direct via HelloAsso"
+    },
+    "mission": {
+      "overline": "NOTRE IMPACT",
+      "title": "Agir ensemble pour demain",
+      "desc": "Cœur and Care mobilise la solidarité pour offrir un accompagnement digne aux enfants et aux mamans vulnérables.",
+      "link": "Découvrir notre histoire"
+    },
+    "axis": {
+      "overline": "NOS DOMAINES",
+      "title": "Nos axes d’action"
+    },
+    "projectsCta": {
+      "overline": "NOS PROJETS",
+      "title": "Découvrez nos actions <br/> sur le terrain",
+      "desc": "De l'école Les Mésanges à l'orphelinat Padre Pio, découvrez comment vos dons transforment des vies.",
+      "btn": "Voir tous les projets"
+    },
+    "stats": {
+      "transparency": "Transparence financière",
+      "actions": "Actions en France & Côte d’Ivoire",
+      "volunteers": "Plus de 20 bénévoles engagés"
+    }
+  }
+}

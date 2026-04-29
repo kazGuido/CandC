@@ -10,11 +10,13 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
 import { Blog } from './pages/Blog';
+import { BlogPost } from './pages/BlogPost';
 import { About } from './pages/About';
 import { Support } from './pages/Support';
 import { Contact } from './pages/Contact';
 import { Legal } from './pages/Legal';
 import { Privacy } from './pages/Privacy';
+import { Admin } from './pages/Admin';
 import { Seo } from './components/Seo';
 
 const routeSeo: Record<string, {title: string; description: string}> = {
@@ -29,6 +31,10 @@ const routeSeo: Record<string, {title: string; description: string}> = {
   '/blog': {
     title: 'Blog',
     description: "Actualites et retours d'impact de l'association Cœur and Care.",
+  },
+  '/blog/:slug': {
+    title: 'Blog',
+    description: "Article du blog Cœur and Care.",
   },
   '/a-propos': {
     title: 'Qui sommes-nous',
@@ -46,7 +52,10 @@ const routeSeo: Record<string, {title: string; description: string}> = {
 
 const AppContent = () => {
   const location = useLocation();
-  const seo = routeSeo[location.pathname] ?? {
+  const seo =
+    location.pathname.startsWith('/blog/')
+      ? routeSeo['/blog/:slug']
+      : routeSeo[location.pathname] ?? {
     title: 'Cœur and Care',
     description: 'Association Cœur and Care.',
   };
@@ -60,11 +69,13 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/projets" element={<Projects />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/a-propos" element={<About />} />
           <Route path="/soutenir" element={<Support />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/mentions-legales" element={<Legal />} />
           <Route path="/confidentialite" element={<Privacy />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
       <Footer />

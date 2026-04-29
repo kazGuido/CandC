@@ -1,39 +1,27 @@
 import { motion } from 'motion/react';
 import { FormEvent, useState } from 'react';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BlogCategory, BlogStatus } from '../data';
 import { trackEvent } from '../lib/analytics';
-
-const MOCK_POSTS = [
-  {
-    id: 1,
-    title: "Le lancement officiel de l'association",
-    excerpt: "Retour sur la création de Cœur and Care en août 2025 et nos premières ambitions.",
-    date: "15 Octobre 2025",
-    author: "Bureau National",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    title: "Campagne de rentrée scolaire à Adjamé",
-    excerpt: "Grâce à vos dons, 50 enfants ont pu reprendre le chemin de l'école avec des fournitures complètes.",
-    date: "02 Septembre 2025",
-    author: "Équipe Terrain",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    title: "Soutenir l'autisme en Côte d'Ivoire",
-    excerpt: "Comprendre les enjeux de l'inclusion sociale pour les enfants souffrant de handicap.",
-    date: "20 Août 2025",
-    author: "Dr. Koné",
-    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&auto=format&fit=crop"
-  }
-];
+import { useAppStore } from '../store';
 
 export const Blog = () => {
+  const { blogPosts } = useAppStore();
   const [newsletterMessage, setNewsletterMessage] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+  const [category, setCategory] = useState<BlogCategory | 'Tous'>('Tous');
+  const [status, setStatus] = useState<BlogStatus | 'Tous'>('Tous');
+
+  const categories: Array<BlogCategory | 'Tous'> = ['Tous', 'Événements', 'Campagnes', 'Histoires'];
+  const statuses: Array<BlogStatus | 'Tous'> = ['Tous', 'à venir', 'passé'];
+
+  const posts = blogPosts.filter((p) => {
+    const categoryOk = category === 'Tous' ? true : p.category === category;
+    const statusOk = status === 'Tous' ? true : p.status === status;
+    return categoryOk && statusOk;
+  });
 
   const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,14 +67,47 @@ export const Blog = () => {
           <span className="text-overline mx-auto">ACTUALITÉS</span>
           <h1 className="text-4xl md:text-7xl font-serif mb-6 text-brand-brown">Le Blog</h1>
           <p className="text-brand-brown/60 max-w-2xl mx-auto text-lg leading-relaxed">
-            Suivez nos aventures, nos défis et nos victoires sur le terrain. 
+            Événements, campagnes et histoires d’impact : suivez nos aventures et nos victoires sur le terrain.
           </p>
         </div>
 
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-12">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {categories.map((c) => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={`px-5 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all border ${
+                  category === c
+                    ? 'bg-brand-brown text-white border-brand-brown'
+                    : 'bg-white text-brand-brown/70 border-brand-terracotta/10 hover:border-brand-terracotta/30'
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {statuses.map((s) => (
+              <button
+                key={s}
+                onClick={() => setStatus(s)}
+                className={`px-5 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all border ${
+                  status === s
+                    ? 'bg-brand-terracotta text-white border-brand-terracotta'
+                    : 'bg-white text-brand-brown/70 border-brand-terracotta/10 hover:border-brand-terracotta/30'
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {MOCK_POSTS.map((post, index) => (
+          {posts.map((post, index) => (
             <motion.article
-              key={post.id}
+              key={post.slug}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -95,14 +116,22 @@ export const Blog = () => {
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img 
-                  src={post.image} 
+                  src={post.coverImage} 
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
               <div className="p-8">
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-brand-terracotta">
+                    {post.category}
+                  </span>
+                  <span className={`text-[10px] uppercase tracking-widest font-bold ${post.status === 'à venir' ? 'text-brand-ochre' : 'text-brand-brown/40'}`}>
+                    {post.status}
+                  </span>
+                </div>
                 <div className="flex items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-brand-brown/40 mb-4">
-                  <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
+                  <span className="flex items-center gap-1"><Calendar size={12} /> {post.dateLabel}</span>
                   <span className="flex items-center gap-1"><User size={12} /> {post.author}</span>
                 </div>
                 <h2 className="text-2xl font-serif font-bold text-brand-brown mb-4 group-hover:text-brand-terracotta transition-colors">
@@ -111,9 +140,13 @@ export const Blog = () => {
                 <p className="text-brand-brown/70 text-sm leading-relaxed mb-6">
                   {post.excerpt}
                 </p>
-                <button className="flex items-center gap-2 text-brand-terracotta font-bold uppercase tracking-widest text-xs hover:gap-4 transition-all">
+                <Link
+                  to={`/blog/${post.slug}`}
+                  onClick={() => trackEvent('blog_open_post', { slug: post.slug })}
+                  className="flex items-center gap-2 text-brand-terracotta font-bold uppercase tracking-widest text-xs hover:gap-4 transition-all"
+                >
                   Lire la suite <ArrowRight size={14} />
-                </button>
+                </Link>
               </div>
             </motion.article>
           ))}

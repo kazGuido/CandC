@@ -1,42 +1,44 @@
 import { motion } from 'motion/react';
 import { Heart, CreditCard, Users, Handshake, Gift, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { HELLOASSO_URL } from '../data';
 import { trackEvent } from '../lib/analytics';
-
-const SUPPORT_METHODS = [
-  {
-    title: "Dons Financiers",
-    description: "Financez directement nos actions sur le terrain. 100% de votre don est réinvesti.",
-    icon: CreditCard,
-    cta: "Faire un don via HelloAsso",
-    href: HELLOASSO_URL,
-    external: true,
-  },
-  {
-    title: "Bénévolat",
-    description: "Donnez de votre temps et de vos compétences pour nous aider à grandir.",
-    icon: Users,
-    cta: "Devenir bénévole",
-    href: '/contact',
-  },
-  {
-    title: "Collecte de matériel",
-    description: "Fournitures scolaires, vêtements, jouets : vos objets ont une seconde vie utile.",
-    icon: Package,
-    cta: "Organiser une collecte",
-    href: '/contact',
-  },
-  {
-    title: "Parrainage",
-    description: "Accompagnez personnellement un enfant dans sa scolarité sur le long terme.",
-    icon: Handshake,
-    cta: "En savoir plus",
-    href: '/contact',
-  }
-];
+import { useAppStore } from '../store';
 
 export const Support = () => {
+  const { helloAssoUrl } = useAppStore();
+
+  const SUPPORT_METHODS = [
+    {
+      title: "Dons Financiers",
+      description: "Financez directement nos actions sur le terrain. Vous serez redirigé vers HelloAsso pour finaliser votre don en toute sécurité.",
+      icon: CreditCard,
+      cta: "Faire un don via HelloAsso",
+      href: helloAssoUrl,
+      external: true,
+    },
+    {
+      title: "Bénévolat",
+      description: "Donnez de votre temps et de vos compétences pour nous aider à grandir.",
+      icon: Users,
+      cta: "Devenir bénévole",
+      href: '/contact',
+    },
+    {
+      title: "Collecte de matériel",
+      description: "Fournitures scolaires, vêtements, jouets : vos objets ont une seconde vie utile.",
+      icon: Package,
+      cta: "Organiser une collecte",
+      href: '/contact',
+    },
+    {
+      title: "Parrainage",
+      description: "Accompagnez personnellement un enfant dans sa scolarité sur le long terme.",
+      icon: Handshake,
+      cta: "En savoir plus",
+      href: '/contact',
+    }
+  ];
+
   return (
     <div className="pt-24 min-h-screen">
       <section className="section-container">
@@ -93,10 +95,10 @@ export const Support = () => {
             <Heart size={60} className="mx-auto text-brand-ochre mb-8 animate-pulse" />
             <h2 className="text-3xl md:text-5xl font-serif mb-8">Espace Donateur Sécurisé</h2>
             <p className="text-white/60 mb-12 max-w-xl mx-auto">
-              Utilisez notre plateforme partenaire HelloAsso pour effectuer vos dons en toute sécurité. Un reçu fiscal vous sera envoyé par mail.
+              En cliquant sur le bouton ci-dessous, vous serez redirigé vers notre plateforme partenaire HelloAsso pour effectuer votre don en toute sécurité. Un reçu fiscal vous sera envoyé par mail.
             </p>
             <a 
-              href={HELLOASSO_URL}
+              href={helloAssoUrl}
               target="_blank" 
               rel="noopener noreferrer"
               onClick={() => trackEvent('donate_click', {source: 'support_hero'})}
