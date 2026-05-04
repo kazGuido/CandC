@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Calendar, User, Instagram } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import { useAppStore } from '../store';
+import { SocialShare } from '../components/SocialShare';
+import { toAbsoluteUrl } from '../lib/site';
 
 export const BlogPost = () => {
   const { slug } = useParams();
@@ -29,6 +31,7 @@ export const BlogPost = () => {
     post.contactCta
       ? `/contact?subject=${encodeURIComponent(post.contactCta.subject)}&message=${encodeURIComponent(post.contactCta.message)}`
       : null;
+  const articleUrl = toAbsoluteUrl(`/blog/${post.slug}`);
 
   return (
     <div className="pt-24 min-h-screen">
@@ -76,6 +79,14 @@ export const BlogPost = () => {
                 </a>
               ) : null}
             </div>
+
+            <SocialShare
+              url={articleUrl}
+              title={post.title}
+              text={post.excerpt}
+              trackingId={`blog_${post.slug}`}
+              className="mb-10"
+            />
 
             <div className="aspect-[16/9] rounded-[2.5rem] overflow-hidden shadow-2xl bg-brand-brown mb-12">
               <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover opacity-95" />

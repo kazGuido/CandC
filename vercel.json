@@ -5,6 +5,14 @@
       "destination": "/api/$1"
     },
     {
+      "source": "/blog/:slug",
+      "destination": "/blog/:slug/index.html"
+    },
+    {
+      "source": "/projets/:projectId",
+      "destination": "/projets/:projectId/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

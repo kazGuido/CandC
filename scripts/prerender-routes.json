@@ -1,0 +1,72 @@
+[
+  {
+    "path": "/blog/collect-and-connect-aout-2025",
+    "title": "Collect & Connect : notre lancement (août 2025)",
+    "description": "Un pique-nique participatif, kids friendly, pour faire connaître l'association et collecter des dons. Retour sur notre tout premier Collect & Connect.",
+    "image": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1600&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/blog/collect-and-connect-juin-2026",
+    "title": "Collect & Connect : rendez-vous en juin 2026",
+    "description": "Nous préparons un nouvel événement Collect & Connect en juin 2026. Vous souhaitez participer, aider à l’organisation ou proposer un lieu ?",
+    "image": "https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1600&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/blog/histoire-malika",
+    "title": "Histoire d’impact : Malika et le retour à l’école",
+    "description": "Malika a perdu la vue d’un œil après un accident. Nous avons pris en charge ses frais d’opticien et des lunettes pour qu’elle puisse poursuivre sa scolarité.",
+    "image": "https://images.unsplash.com/photo-1529119368496-2dfda6ec2804?q=80&w=1600&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/blog/arbre-de-noel-bouake",
+    "title": "Campagne : Arbre de Noël solidaire à Bouaké",
+    "description": "À Noël, nous avons participé à l’organisation d’un arbre de Noël pour 1000 enfants à Bouaké. Une action que nous souhaitons renouveler chaque année.",
+    "image": "https://images.unsplash.com/photo-1543946603-0f7b0f2b0e0d?q=80&w=1600&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/mesanges",
+    "title": "Ecole Les Mésanges",
+    "description": "Subventions de scolarité, parrainage et fournitures scolaires pour des enfants vulnérables.",
+    "image": "https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/padre-pio",
+    "title": "Orphelinat Padre Pio",
+    "description": "Dons de vêtements, jouets et livres pour les orphelins.",
+    "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/yamoussoukro",
+    "title": "Complexe socio-éducatif",
+    "description": "Un même lieu, deux missions: centre éducatif spécialisé (autisme) et centre social.",
+    "image": "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/normandie",
+    "title": "Partenariat solidaire en Normandie",
+    "description": "Mobilisation d’une école en France pour collecter livres, jouets et vêtements, acheminés ensuite vers la Côte d’Ivoire.",
+    "image": "https://images.unsplash.com/photo-1526057565006-20beab8dd2ed?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/bethel",
+    "title": "ONG Bethel Food Internationale",
+    "description": "Un nouvel orphelinat né de l’histoire d’une femme devenue un soutien majeur pour des centaines d’enfants.",
+    "image": "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  },
+  {
+    "path": "/projets/bouake-noel",
+    "title": "Arbre de Noël solidaire",
+    "description": "Participation à l’organisation d’un arbre de Noël pour 1000 enfants, une initiative que nous souhaitons reconduire chaque fin d’année.",
+    "image": "https://images.unsplash.com/photo-1542315192-1f61a1796d00?q=80&w=1200&auto=format&fit=crop",
+    "type": "article"
+  }
+]
