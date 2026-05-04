@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { trackEvent } from '../lib/analytics';
 import { useAppStore } from '../store';
 import { Project } from '../data';
+import { SocialShare } from '../components/SocialShare';
+import { toAbsoluteUrl } from '../lib/site';
 
 export const Projects = () => {
   const { projects, helloAssoUrl } = useAppStore();
@@ -12,6 +14,7 @@ export const Projects = () => {
     <div className="grid gap-16 md:gap-32">
       {projList.map((project, index) => {
          const dUrl = project.helloAssoUrl || `${helloAssoUrl}?utm_source=site&utm_medium=project&utm_campaign=${project.id}`;
+         const projectUrl = toAbsoluteUrl(`/projets/${project.id}`);
 
          return (
           <motion.div
@@ -50,15 +53,31 @@ export const Projects = () => {
                 </ul>
               </div>
 
-              <a
-                href={dUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent('donate_click', { source: `project_${project.id}` })}
-                className="btn-primary w-full sm:w-auto inline-flex justify-center"
-              >
-                Soutenir ce projet
-              </a>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to={`/projets/${project.id}`}
+                  onClick={() => trackEvent('project_open_details', { projectId: project.id })}
+                  className="btn-outline w-full sm:w-auto inline-flex justify-center"
+                >
+                  Voir le projet
+                </Link>
+                <a
+                  href={dUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('donate_click', { source: `project_${project.id}` })}
+                  className="btn-primary w-full sm:w-auto inline-flex justify-center"
+                >
+                  Soutenir ce projet
+                </a>
+              </div>
+              <SocialShare
+                url={projectUrl}
+                title={project.title}
+                text={project.description}
+                trackingId={`project_${project.id}`}
+                className="mt-6"
+              />
             </div>
           </motion.div>
         );

@@ -131,7 +131,9 @@ export const CONTACT_INFO = {
 };
 
 // Replace with your public HelloAsso campaign URL.
-export const HELLOASSO_URL = import.meta.env.VITE_HELLOASSO_URL || 'https://www.helloasso.com';
+const viteEnv = (import.meta as { env?: Record<string, string | undefined> }).env;
+export const HELLOASSO_URL = viteEnv?.VITE_HELLOASSO_URL || 'https://www.helloasso.com';
+export const SITE_URL = viteEnv?.VITE_SITE_URL || 'https://coeurandcare.org';
 
 export type BlogCategory = 'Événements' | 'Campagnes' | 'Histoires';
 export type BlogStatus = 'passé' | 'à venir';
